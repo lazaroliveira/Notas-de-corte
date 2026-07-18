@@ -11,9 +11,10 @@ const rows = RAW.rows.map(r => ({
   curso: RAW.curso[r[4]],
   grau: RAW.grau[r[5]],
   turno: RAW.turno[r[6]],
-  categoria: RAW.categoria[r[7]],
-  nota: r[8],
-  vagas: r[9]
+  grupo: RAW.grupo[r[7]],
+  categoria: RAW.categoria[r[8]],
+  nota: r[9],
+  vagas: r[10]
 }));
 
 // populate stats
@@ -48,14 +49,25 @@ fillSelect('fIes', iesOrder, v => `${siglaByIes[v]} — ${v.length>42? v.slice(0
 const turnoOrder = [...new Set(rows.map(r=>r.turno))].sort();
 fillSelect('fTurno', turnoOrder);
 
-const catOrder = [...new Set(rows.map(r=>r.categoria))].sort();
-fillSelect('fCat', catOrder);
+const grupoOrder = [...new Set(rows.map(r=>r.grupo))].sort();
+fillSelect('fGrupo', grupoOrder);
+
+function refreshCatOptions(){
+  const grupoSel = els.grupo.value;
+  const prevCat = els.cat.value;
+  els.cat.innerHTML = '<option value="">Todas</option>';
+  const pool = grupoSel ? rows.filter(r=>r.grupo===grupoSel) : rows;
+  const catOrder = [...new Set(pool.map(r=>r.categoria))].sort();
+  fillSelect('fCat', catOrder);
+  if (catOrder.includes(prevCat)) els.cat.value = prevCat;
+}
 
 const els = {
   curso: document.getElementById('fCurso'),
   uf: document.getElementById('fUf'),
   ies: document.getElementById('fIes'),
   turno: document.getElementById('fTurno'),
+  grupo: document.getElementById('fGrupo'),
   cat: document.getElementById('fCat'),
   nota: document.getElementById('fNota'),
   soElegivel: document.getElementById('fSoElegivel'),
@@ -66,6 +78,8 @@ const els = {
   pagination: document.getElementById('pagination')
 };
 
+refreshCatOptions();
+
 let page = 1;
 const PAGE_SIZE = 40;
 
@@ -74,6 +88,7 @@ function getFiltered(){
   const uf = els.uf.value;
   const ies = els.ies.value;
   const turno = els.turno.value;
+  const grupo = els.grupo.value;
   const cat = els.cat.value;
   const notaEnem = els.nota.value === '' ? null : parseFloat(els.nota.value);
   const soElegivel = els.soElegivel.checked;
@@ -83,6 +98,7 @@ function getFiltered(){
     if (uf && r.uf !== uf) return false;
     if (ies && r.ies !== ies) return false;
     if (turno && r.turno !== turno) return false;
+    if (grupo && r.grupo !== grupo) return false;
     if (cat && r.categoria !== cat) return false;
     if (soElegivel && notaEnem !== null && r.nota > notaEnem) return false;
     return true;
@@ -137,6 +153,7 @@ function render(){
   els.uf.addEventListener(evt, () => { page=1; render(); });
   els.ies.addEventListener(evt, () => { page=1; render(); });
   els.turno.addEventListener(evt, () => { page=1; render(); });
+  els.grupo.addEventListener(evt, () => { refreshCatOptions(); page=1; render(); });
   els.cat.addEventListener(evt, () => { page=1; render(); });
   els.nota.addEventListener(evt, () => { page=1; render(); });
   els.soElegivel.addEventListener(evt, () => { page=1; render(); });
