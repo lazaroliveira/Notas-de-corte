@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Sisu Nordeste — Notas de Corte 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="brand">Sisu<span>NE</span></div>
+    <div class="brand-sub">Consulta de notas de corte · Região Nordeste</div>
+  </div>
+  <div class="edicao-tag">Edição 2025</div>
+</div>
+
+<div class="hero">
+  <h1>Ache seu curso, veja a <em>nota de corte</em>, sem enrolação.</h1>
+  <p>Dados oficiais do Sisu 2025 para as 38 instituições públicas do Nordeste — filtre por estado, universidade ou curso, ou informe sua nota do Enem e veja onde ela te leva.</p>
+  <div class="stats-row" id="statsRow"></div>
+</div>
+
+<div class="console">
+  <div class="filters">
+    <div class="field search-wide">
+      <label>Buscar curso</label>
+      <input type="text" id="fCurso" placeholder="ex: medicina, direito, sistemas de informação...">
+    </div>
+    <div class="field">
+      <label>Estado</label>
+      <select id="fUf"><option value="">Todos</option></select>
+    </div>
+    <div class="field">
+      <label>Instituição</label>
+      <select id="fIes"><option value="">Todas</option></select>
+    </div>
+    <div class="field">
+      <label>Turno</label>
+      <select id="fTurno"><option value="">Todos</option></select>
+    </div>
+    <div class="field">
+      <label>Categoria de vaga</label>
+      <select id="fCat"><option value="">Todas</option></select>
+    </div>
+  </div>
+
+  <div class="enem-box">
+    <label for="fNota">Minha nota Enem</label>
+    <input type="number" id="fNota" placeholder="ex: 620.5" step="0.01" min="0" max="1000">
+    <label class="toggle"><input type="checkbox" id="fSoElegivel"> mostrar só onde eu passaria</label>
+    <span class="hint">Deixe em branco para ver todas as notas de corte.</span>
+  </div>
+
+  <div class="results-meta">
+    <div class="count"><b id="resultCount">0</b> cursos encontrados</div>
+    <select class="sort-select" id="sortSelect">
+      <option value="nota_asc">Ordenar: menor nota de corte</option>
+      <option value="nota_desc">Ordenar: maior nota de corte</option>
+      <option value="curso_az">Ordenar: curso (A–Z)</option>
+      <option value="ies_az">Ordenar: instituição (A–Z)</option>
+    </select>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Instituição / Campus</th>
+          <th>Curso</th>
+          <th>Turno</th>
+          <th>Categoria</th>
+          <th style="text-align:right;">Nota de corte</th>
+        </tr>
+      </thead>
+      <tbody id="resultsBody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <b>Nenhum curso encontrado</b>
+      Tente ajustar os filtros ou a busca.
+    </div>
+  </div>
+
+  <div class="pagination" id="pagination"></div>
+
+  <div class="footnote">
+    Fonte: microdados públicos do Sisu 2025 (MEC). Ferramenta apenas informativa — não realiza inscrições, não substitui o site oficial do Sisu e não garante aprovação.
+    Produzido por Lázaro Tenório
+  </div>
+</div>
+
+<script src="app.js" defer></script>
+</body>
+</html>
